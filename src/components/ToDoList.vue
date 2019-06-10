@@ -1,5 +1,5 @@
 <template>
-  <v-layout column align-center>
+  <v-layout column align-center class="todos">
     <v-flex my-4>
       <h1>Todos</h1>
     </v-flex>
@@ -49,9 +49,9 @@
 
 <script>
 //TODO: style
-//TODO: max width and row
-//TODO: display error messages in snackbar
 //TODO: edit feature
+//TODO: implement child component
+//TODO: more thourough error handling
 
 "use strict";
 export default {
@@ -113,7 +113,7 @@ export default {
 </script>
 
 <style scoped>
-.form {
+.todos {
   max-width: 400px;
 }
 .done {
