@@ -1,57 +1,65 @@
 <template>
-  <v-layout column align-center class="todos">
-    <v-flex my-4>
-      <h1>Todos</h1>
-    </v-flex>
-    <v-flex>
-      <v-snackbar v-model="error" top :timeout="timeout">
-        {{ error }}
-        <v-btn color="pink" flat @click="snackbar = false">Close</v-btn>
-      </v-snackbar>
-    </v-flex>
-    <v-flex my-4>
-      <v-form ref="form" class="form" @submit.prevent="addTodo">
-        <v-text-field
-          input="text"
-          solo
-          autofocus
-          v-model.trim="newTodo"
-          placeholder="add todo"
-          append-icon="close"
-          append-outer-icon="add"
-          @click:append-outer.prevent="addTodo"
-          @click:append="$refs.form.reset()"
-        ></v-text-field>
-      </v-form>
-    </v-flex>
-    <v-flex>
-      <v-list v-if="todos.length">
-        <v-list-tile v-for="todo in todos" :key="todo.id">
-          <v-list-tile-action>
-            <v-checkbox
-              @change="completedTodo(todo)"
-              v-model="todo.done"
-              :class="{ done: todo.done }"
-              :label="todo.title"
-            ></v-checkbox>
-          </v-list-tile-action>
-
-          <v-list-tile-action>
-            <v-btn small flat fab @click.prevent="removeTodo(todo)">
-              <v-icon>delete</v-icon>
-            </v-btn>
-          </v-list-tile-action>
-        </v-list-tile>
-      </v-list>
-    </v-flex>
-  </v-layout>
+  <v-content>
+    <v-layout column align-center class="todos">
+      <v-flex my-4 xs12>
+        <h1>Todos</h1>
+      </v-flex>
+      <v-flex xs12>
+        <v-snackbar v-model="error" top :timeout="timeout">
+          {{ error }}
+          <v-btn color="pink" flat @click="snackbar = false">Close</v-btn>
+        </v-snackbar>
+      </v-flex>
+      <v-flex my-4 xs12>
+        <v-form ref="form" class="form" @submit.prevent="addTodo">
+          <v-text-field
+            input="text"
+            solo
+            autofocus
+            v-model.trim="newTodo"
+            placeholder="add todo"
+            append-icon="close"
+            append-outer-icon="add"
+            @click:append-outer.prevent="addTodo"
+            @click:append="$refs.form.reset()"
+          ></v-text-field>
+        </v-form>
+      </v-flex>
+      <v-flex xs12>
+        <v-list v-if="todos.length">
+          <v-list-tile v-for="todo in todos" :key="todo.id">
+            <v-list-tile-action>
+              <v-checkbox @change="completedTodo(todo)" v-model="todo.done"></v-checkbox>
+            </v-list-tile-action>
+            <v-list-tile-content :class="{ done: todo.done }">{{todo.title}}</v-list-tile-content>
+            <v-spacer></v-spacer>
+            <v-list-tile-action>
+              <v-btn small flat fab>
+                <v-icon>edit</v-icon>
+              </v-btn>
+            </v-list-tile-action>
+            <v-list-tile-action>
+              <v-btn small flat fab @click.prevent="removeTodo(todo)">
+                <v-icon>delete</v-icon>
+              </v-btn>
+            </v-list-tile-action>
+          </v-list-tile>
+        </v-list>
+      </v-flex>
+    </v-layout>
+    <v-layout>
+      <v-flex>
+        <v-btn flat @click.prevent="displayList">Todo</v-btn>
+      </v-flex>
+    </v-layout>
+  </v-content>
 </template>
 
 <script>
 //TODO: style
 //TODO: edit feature
 //TODO: implement child component
-//TODO: more thourough error handling
+//TODO: more thourough error handling -> CORS + no todos logic + todo.id
 
 "use strict";
 export default {
@@ -79,7 +87,6 @@ export default {
         }
       } catch (error) {
         this.error = error.message;
-        console.log(this.error);
       }
       this.$refs.form.reset();
     },
@@ -114,7 +121,8 @@ export default {
 
 <style scoped>
 .todos {
-  max-width: 400px;
+  width: 400px;
+  border: 1px solid pink;
 }
 .done {
   text-decoration: line-through;
