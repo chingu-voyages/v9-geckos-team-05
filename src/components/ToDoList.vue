@@ -22,12 +22,13 @@
       <v-list v-if="todos.length">
         <v-list-tile v-for="todo in todos" :key="todo.id">
           <v-list-tile-action>
-            <v-checkbox @click="doneTodo(todo)"></v-checkbox>
+            <v-checkbox
+              @change="cpmpletedTodo(todo)"
+              v-model="todo.done"
+              :class="{ done: todo.done }"
+              :label="todo.title"
+            ></v-checkbox>
           </v-list-tile-action>
-
-          <v-list-tile-content>
-            <v-list-tile-title>{{todo.title}}</v-list-tile-title>
-          </v-list-tile-content>
 
           <v-list-tile-action>
             <v-btn small flat fab @click.prevent="removeTodo(todo)">
@@ -41,7 +42,6 @@
 </template>
 
 <script>
-//TODO: handle undefined error
 //TODO: done strikethrough feature
 //TODO: style
 //TODO: max width and row
@@ -76,7 +76,8 @@ export default {
       }
       this.$refs.form.reset();
     },
-    doneTodo: function(todo) {
+
+    completedTodo: function(todo) {
       console.log(this.done);
     },
     removeTodo: function(todo) {
@@ -85,8 +86,13 @@ export default {
     }
   },
   created() {
-    //TODO: print empty if empty
-    this.todos = JSON.parse(localStorage.getItem("todos"));
+    const storageTodos = localStorage.getItem("todos");
+    if (storageTodos) {
+      this.todos = JSON.parse(localStorage.getItem("todos"));
+    } else if (storageTodos === null || undefined) {
+      localStorage.setItem("todos", JSON.stringify([]));
+      this.error = "No todos to do";
+    }
   }
 };
 </script>
@@ -94,5 +100,8 @@ export default {
 <style scoped>
 .form {
   max-width: 400px;
+}
+.done {
+  text-decoration: line-through;
 }
 </style>
