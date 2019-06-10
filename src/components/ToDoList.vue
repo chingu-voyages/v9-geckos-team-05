@@ -3,6 +3,12 @@
     <v-flex my-4>
       <h1>Todos</h1>
     </v-flex>
+    <v-flex>
+      <v-snackbar v-model="error" top :timeout="timeout">
+        {{ error }}
+        <v-btn color="pink" flat @click="snackbar = false">Close</v-btn>
+      </v-snackbar>
+    </v-flex>
     <v-flex my-4>
       <v-form ref="form" class="form" @submit.prevent="addTodo">
         <v-text-field
@@ -23,7 +29,7 @@
         <v-list-tile v-for="todo in todos" :key="todo.id">
           <v-list-tile-action>
             <v-checkbox
-              @change="cpmpletedTodo(todo)"
+              @change="completedTodo(todo)"
               v-model="todo.done"
               :class="{ done: todo.done }"
               :label="todo.title"
@@ -42,7 +48,6 @@
 </template>
 
 <script>
-//TODO: done strikethrough feature
 //TODO: style
 //TODO: max width and row
 //TODO: display error messages in snackbar
@@ -55,7 +60,9 @@ export default {
       newTodo: "",
       todos: [],
       done: false,
-      error: ""
+      error: "",
+      snackbar: false,
+      timeout: 4000
     };
   },
   methods: {
@@ -78,7 +85,11 @@ export default {
     },
 
     completedTodo: function(todo) {
-      console.log(this.done);
+      if (todo.done === true) {
+        localStorage.setItem("todos", JSON.stringify(this.todos));
+      } else if (todo.done == false) {
+        localStorage.setItem("todos", JSON.stringify(this.todos));
+      }
     },
     removeTodo: function(todo) {
       this.todos.splice(this.todos.indexOf(todo), 1);
@@ -86,7 +97,11 @@ export default {
     }
   },
   created() {
+    //TODO: refactor this
     const storageTodos = localStorage.getItem("todos");
+    if (this.todos.length <= 0) {
+      this.error = "No todos to do";
+    }
     if (storageTodos) {
       this.todos = JSON.parse(localStorage.getItem("todos"));
     } else if (storageTodos === null || undefined) {
