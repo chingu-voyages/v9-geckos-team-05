@@ -1,58 +1,58 @@
 <template>
-  <v-content>
-    <v-layout column align-center class="todos">
-      <v-flex my-4 xs12>
-        <h1>Todos</h1>
-      </v-flex>
-      <v-flex xs12>
-        <v-snackbar v-model="error" top :timeout="timeout">
-          {{ error }}
-          <v-btn color="pink" flat @click="snackbar = false">Close</v-btn>
-        </v-snackbar>
-      </v-flex>
-      <v-flex my-4 xs12>
-        <v-form ref="form" class="form" @submit.prevent="addTodo">
-          <v-text-field
-            input="text"
-            solo
-            autofocus
-            v-model.trim="newTodo"
-            placeholder="add todo"
-            append-icon="close"
-            append-outer-icon="add"
-            @click:append-outer.prevent="addTodo"
-            @click:append="$refs.form.reset()"
-          ></v-text-field>
-        </v-form>
-      </v-flex>
-      <v-flex xs12>
-        <v-list v-if="todos.length">
-          <v-list-tile v-for="todo in todos" :key="todo.id">
-            <v-list-tile-action>
-              <v-checkbox @change="completedTodo(todo)" v-model="todo.done"></v-checkbox>
-            </v-list-tile-action>
-            <v-list-tile-content :class="{ done: todo.done }">{{todo.title}}</v-list-tile-content>
-            <v-spacer></v-spacer>
-            <v-list-tile-action>
-              <v-btn small flat fab>
-                <v-icon>edit</v-icon>
-              </v-btn>
-            </v-list-tile-action>
-            <v-list-tile-action>
-              <v-btn small flat fab @click.prevent="removeTodo(todo)">
-                <v-icon>delete</v-icon>
-              </v-btn>
-            </v-list-tile-action>
-          </v-list-tile>
-        </v-list>
+  <v-layout>
+    <v-card class="todos" v-show="display">
+      <v-layout column align-center>
+        <v-flex my-4 xs12>
+          <h1>Todos</h1>
+        </v-flex>
+        <v-flex xs12>
+          <v-snackbar v-model="error" top :timeout="timeout">
+            {{ error }}
+            <v-btn color="pink" flat @click="snackbar = false">Close</v-btn>
+          </v-snackbar>
+        </v-flex>
+
+        <v-flex xs12mclass="todo">
+          <v-list v-if="todos.length">
+            <v-list-tile v-for="todo in todos" :key="todo.id">
+              <v-list-tile-action>
+                <v-checkbox @change="completedTodo(todo)" v-model="todo.done"></v-checkbox>
+              </v-list-tile-action>
+              <v-list-tile-content :class="{ done: todo.done }">{{todo.title}}</v-list-tile-content>
+              <v-spacer></v-spacer>
+              <v-list-tile-action>
+                <v-btn small flat fab>
+                  <v-icon>edit</v-icon>
+                </v-btn>
+              </v-list-tile-action>
+              <v-list-tile-action>
+                <v-btn small flat fab dark @click.prevent="removeTodo(todo)">
+                  <v-icon>delete</v-icon>
+                </v-btn>
+              </v-list-tile-action>
+            </v-list-tile>
+          </v-list>
+        </v-flex>
+        <v-flex xs12>
+          <v-form ref="form" class="form" @submit.prevent="addTodo">
+            <v-text-field
+              input="text"
+              autofocus
+              v-model.trim="newTodo"
+              placeholder="add todo"
+              append-icon="close"
+              @click:append="$refs.form.reset()"
+            ></v-text-field>
+          </v-form>
+        </v-flex>
+      </v-layout>
+    </v-card>
+    <v-layout justify-center>
+      <v-flex class="toggle-btn">
+        <v-btn flat @click.prevent="display = !display">Todo</v-btn>
       </v-flex>
     </v-layout>
-    <v-layout>
-      <v-flex>
-        <v-btn flat @click.prevent="displayList">Todo</v-btn>
-      </v-flex>
-    </v-layout>
-  </v-content>
+  </v-layout>
 </template>
 
 <script>
@@ -70,7 +70,8 @@ export default {
       done: false,
       error: "",
       snackbar: false,
-      timeout: 4000
+      timeout: 4000,
+      display: false
     };
   },
   methods: {
@@ -121,10 +122,21 @@ export default {
 
 <style scoped>
 .todos {
-  width: 400px;
+  width: 350px;
   border: 1px solid pink;
+  position: absolute;
+  right: 0;
+  bottom: 50px;
+}
+.todo {
+  width: 100%;
 }
 .done {
   text-decoration: line-through;
+}
+.toggle-btn {
+  position: absolute;
+  right: 0;
+  bottom: 0;
 }
 </style>
