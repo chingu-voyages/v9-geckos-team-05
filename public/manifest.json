@@ -1,6 +1,6 @@
 {
-  "name": "test Extensions",
-  "description": "test Extension",
+  "name": "Chrome Extensions",
+  "description": "Chrome Extension",
   "version": "1.0",
   "manifest_version": 2,
   "chrome_url_overrides": {
